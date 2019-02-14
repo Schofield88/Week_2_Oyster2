@@ -1,3 +1,5 @@
+require 'journey'
+
 class Oystercard
   attr_accessor :balance
   attr_reader :entry_station
@@ -7,8 +9,8 @@ class Oystercard
   MIN_BALANCE = 1
   def initialize
     @balance = 0
-    @entry_station = nil
     @list_of_journey = {}
+    @trip = Journey.new
   end
 
   def top_up(value)
@@ -17,18 +19,27 @@ class Oystercard
   end
 
   def in_journey?
-    !entry_station
+    if @trip.entry_station == nil
+      false
+    else
+      true
+    end
+  end
+
+  def entry_station
+    @trip.entry_station
   end
 
   def touch_in(station)
     raise "Not enough balance" if @balance < MIN_BALANCE
-    @entry_station = station
+    @trip.entry_station = station
     @list_of_journey.merge!(entry: station)
   end
 
   def touch_out(exit_station)
     deduct(MIN_BALANCE)
-    @entry_station = nil
+    @trip.exit_station = exit_station
+    @trip.entry_station = nil
     @list_of_journey.merge!(exit: exit_station)
 
   end

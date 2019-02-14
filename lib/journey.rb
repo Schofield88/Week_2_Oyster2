@@ -1,6 +1,6 @@
 class Journey
 
-  attr_reader :entry_station, :exit_station
+  attr_accessor :entry_station, :exit_station
 
   PENALTY = 6
   FARE = 1
